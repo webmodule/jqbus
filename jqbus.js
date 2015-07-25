@@ -3,21 +3,27 @@ _define_('jqbus', function(jqbus){
 	var jQuery = _module_("jQuery");
 	var globalBus = jQuery("<globalBus>");
 	var dotToDash = function(moduleName){
-		return moduleName.replace('\.',"-","g")
-	}
+		return moduleName.replace('\.',"-","g");
+	};
 	var toNameClass = function(moduleName){
-		return ".bus-"+dotToDash(moduleName);
-	}
+		return "bus-"+ dotToDash(moduleName);
+	};
 
 	//APIS Starts from Here
 	return  {
 		__nameSpace__ : "div",
+		__targetId__ : "",
 		target : globalBus,
-		_instance_ : function(nameSpace,id){
-			this.__nameSpace__ = __nameSpace__ || __nameSpace__;
-			this.target = jQuery("<"+this.__nameSpace__+">");
+		_instance_ : function(nameSpace,targetId){
+			var _targteScope = is.Object(nameSpace) ? nameSpace : null;
+			this.__nameSpace__ = is.String(nameSpace) ? nameSpace : this.__nameSpace__;
+			this.__targetId__ = is.String(targetId) ? targetId : this.__targetId__;
+			this.target = jQuery("<"+this.__nameSpace__+" id="+this.__targetId__ +">");
 			globalBus.append(this.target);
 			this.ids = [];
+			if(_targteScope){
+				this.bind(_targteScope);
+			}
 		},
 		instance : function(){
 			var ins = Object.create(this);
@@ -36,7 +42,7 @@ _define_('jqbus', function(jqbus){
 				var eventName = eventHash.split(" ");
 				this.ids.push({eventName : eventName[0], filter : eventName[1],fun : fun});
 				if(eventName[1]){
-					var hash = toNameClass(eventName[1]);
+					var hash = "."+toNameClass(eventName[1]);
 					globalBus.on(eventName[0],hash,fun);
 				} else globalBus.on(eventName[0],fun);
 			};
@@ -46,8 +52,6 @@ _define_('jqbus', function(jqbus){
 			if(is.Valid(this.ids,"instantiate before using `on`")){
 				var _eventName = is.String(eventHash) ? eventHash.split(" ") : undefined;
 				var _fun = is.Function(eventHash) ? eventHash : _fun;
-				var funNotDefined = ;
-				var eventNotDefined = ;
 				for(var i in this.ids){
 					if(this.ids[i] && ( _fun === undefined || this.ids[i].fun === _fun) 
 							&& (_eventName === undefined 
@@ -64,8 +68,8 @@ _define_('jqbus', function(jqbus){
 		bind : function(self,mapping){
 			if(is.Valid(this.ids,"instantiate before using `bind`")){
 				var mapping = mapping || self.globalEvents;
-				this.target.removeClass().addClass(toNameClass(this.name));
-				this.target.attr("id",dotToDash(this.id));
+				this.target.removeClass().addClass(toNameClass(self.name));
+				this.target.attr("id",dotToDash(self.id || ""));
 				for(var en in mapping){
 					(function(jqb,self,eventname,method){
 						jqb.on(eventname,function(){

@@ -1,6 +1,6 @@
 {
 	"name": "webmodules/jqbus",
-	"webmodules/jqrouter": {
+	"webmodules/jqbus": {
 		"js": ["jqbus.js"],
 		"on": ["webmodules/foo"]
 	}
