@@ -40,11 +40,14 @@ _define_('jqbus', function(jqbus){
 		on : function(eventHash, fun){
 			if(is.Valid(this.ids,"instantiate before using `on`")){
 				var eventName = eventHash.split(" ");
-				this.ids.push({eventName : eventName[0], filter : eventName[1],fun : fun});
+				var callback = function(e,data){
+					return fun.call(this,e,e.target,data);
+				};
+				this.ids.push({eventName : eventName[0], filter : eventName[1],fun : callback});
 				if(eventName[1]){
 					var hash = "."+toNameClass(eventName[1]);
-					globalBus.on(eventName[0],hash,fun);
-				} else globalBus.on(eventName[0],fun);
+					globalBus.on(eventName[0],hash,callback);
+				} else globalBus.on(eventName[0],callback);
 			};
 			return this;				
 		},
@@ -71,13 +74,13 @@ _define_('jqbus', function(jqbus){
 				this.target.removeClass().addClass(toNameClass(self.name));
 				this.target.attr("id",dotToDash(self.id || ""));
 				for(var en in mapping){
-					(function(jqb,self,eventname,method){
+					(function(jqb,ins,eventname,method){
 						jqb.on(eventname,function(){
-							if(is.Function(self[method])){
-								self[method].apply(self,arguments);
+							if(is.Function(ins[method])){
+								ins[method].apply(ins,arguments);
 							}
 						});
-					})(this,ins,en,mapping[eventname]);
+					})(this,self,en,mapping[en]);
 				}	
 			}
 		}
