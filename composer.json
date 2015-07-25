@@ -1,0 +1,12 @@
+{
+	"name": "webmodules/jqbus",
+	"type": "utility",
+	"description": "JavaSript based message queue",
+	"keywords": ["javascript", "controller", "router"],
+	"license": "MIT",
+
+	"require": {
+		"webmodules/jquery": ">=1.8",
+		"webmodules/foo": ">=0.0.0"
+	}
+}

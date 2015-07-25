@@ -1,0 +1,10 @@
+{
+	"name": "webmodules/jqbus",
+	"webmodules/jqrouter": {
+		"js": ["jqbus.js"],
+		"on": ["webmodules/foo"]
+	}
+}
+
+
+
