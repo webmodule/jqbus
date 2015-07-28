@@ -14,16 +14,19 @@ _define_('jqbus', function(jqbus){
 		__nameSpace__ : "div",
 		__targetId__ : "",
 		target : globalBus,
-		_instance_ : function(nameSpace,targetId){
-			var _targteScope = is.Object(nameSpace) ? nameSpace : null;
-			this.__nameSpace__ = is.String(nameSpace) ? nameSpace : this.__nameSpace__;
-			this.__targetId__ = is.String(targetId) ? targetId : this.__targetId__;
-			this.target = jQuery("<"+this.__nameSpace__+" id="+this.__targetId__ +">");
+		_instance_ : function(name,id){
+			var _targteScope = is.Object(name) ? name : null;
+			this.__nameSpace__ = is.String(name) ? name : this.__nameSpace__;
+			this.__targetId__ = is.String(id) ? id : this.__targetId__;
+			this.target = jQuery("<div/>");
 			globalBus.append(this.target);
 			this.ids = [];
-			if(_targteScope){
-				this.bind(_targteScope);
+			if(!_targteScope){
+				_targteScope = {
+					name : 	this.__nameSpace__, id : this.__targetId__
+				};
 			}
+			this.bind(_targteScope);
 		},
 		instance : function(){
 			var ins = Object.create(this);
