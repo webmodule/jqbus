@@ -9,6 +9,22 @@ _define_('jqbus', function(jqbus){
 		return "bus-"+ dotToDash(moduleName);
 	};
 
+  var setDummyDomProp = function(target,__targetId__,__nameSpace__){
+    target.removeClass().addClass(toNameClass(__nameSpace__));
+    target.attr("id",dotToDash(__targetId__ || ""));
+    return target;
+  };
+
+  var bc,$dummyDom;
+  if(window.BroadcastChannel){
+    bc = new BroadcastChannel("jqbus");
+    $dummyDom = jQuery("<div/>")
+    globalBus.append($dummyDom);
+    bc.addEventListener('message', function(e){
+      setDummyDomProp($dummyDom, e.data.__targetId__, e.data.__nameSpace__).trigger(e.data.eventName, e.data.data);
+    });
+  }
+
 	//APIS Starts from Here
 	return  {
 		__nameSpace__ : "div",
@@ -38,6 +54,14 @@ _define_('jqbus', function(jqbus){
 		},
 		publish : function(eventName,data){
 			this.target.trigger(eventName,data);
+      if(bc){
+        bc.postMessage({
+          eventName : eventName,
+          data : data,
+          __nameSpace__ : this.__nameSpace__,
+          __targetId__ : this.__targetId__
+        });
+      }
 			return this;
 		},
 		on : function(eventHash, fun){
@@ -74,8 +98,7 @@ _define_('jqbus', function(jqbus){
 		bind : function(self,mapping){
 			if(is.Valid(this.ids,"instantiate before using `bind`")){
 				var mapping = mapping || self.globalEvents;
-				this.target.removeClass().addClass(toNameClass(self.name));
-				this.target.attr("id",dotToDash(self.id || ""));
+        setDummyDomProp(this.target,self.id,self.name);
 				for(var en in mapping){
 					(function(jqb,ins,eventname,method){
 						jqb.on(eventname,function(){

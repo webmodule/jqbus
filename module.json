@@ -1,7 +1,7 @@
 {
 	"name": "webmodules/jqbus",
 	"webmodules/jqbus": {
-		"js": ["jqbus.js"],
+		"js": ["BroadcastChannel.js","jqbus.js"],
 		"on": ["webmodules/foo"]
 	}
 }
