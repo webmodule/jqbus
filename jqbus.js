@@ -96,7 +96,7 @@ _define_('jqbus', function(jqbus){
 			return this;
 		},
 		bind : function(self,mapping){
-			if(is.Valid(this.ids,"instantiate before using `bind`")){
+			if(is.Valid(this.ids)){
 				var mapping = mapping || self.globalEvents;
         setDummyDomProp(this.target,self.id,self.name);
 				for(var en in mapping){
@@ -107,8 +107,11 @@ _define_('jqbus', function(jqbus){
 							}
 						});
 					})(this,self,en,mapping[en]);
-				}	
-			}
+				}
+        return this;
+			} else {
+        return this.instance().bind(self, mapping);
+      }
 		}
 	};
 });
