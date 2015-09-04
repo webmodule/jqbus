@@ -56,13 +56,14 @@ _define_('jqbus', function (jqbus) {
       this.target.trigger(eventName, data);
       if (bc) {
         try {
-          bc.postMessage({
+          bc.postMessage(JSON.parse(JSON.stringify({
             eventName: eventName,
             data: data,
             __nameSpace__: this.__nameSpace__,
             __targetId__: this.__targetId__
-          });
+          })));
         } catch (e) {
+          console.log(eventName, data);
           console.error("BUS:EXCEPTION", e);
         }
       }
