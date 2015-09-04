@@ -63,7 +63,6 @@ _define_('jqbus', function (jqbus) {
             __targetId__: this.__targetId__
           })));
         } catch (e) {
-          console.log(eventName, data);
           console.error("BUS:EXCEPTION", e);
         }
       }
