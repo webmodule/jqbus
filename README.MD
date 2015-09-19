@@ -35,6 +35,8 @@ bus.on("when_something_happens", function(e,target,data){
 bus.publish("when_something_happens", { name : "Hello" });
 `````
 
+In addition to passing data to different module, JQBUS is able to send data to different tab also for same domain.
+
 
 
 
