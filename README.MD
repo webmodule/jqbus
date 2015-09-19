@@ -37,6 +37,8 @@ bus.publish("when_something_happens", { name : "Hello" });
 
 In addition to passing data to different module, JQBUS is able to send data to different tab also for same domain.
 
-
-
+we can remove listeners when we wish, by simply using 
+```javascript
+bus.off();
+```
 
