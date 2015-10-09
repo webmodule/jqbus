@@ -52,9 +52,10 @@ _define_('jqbus', function (jqbus) {
     trigger: function () {
       return this.publish.apply(this, arguments);
     },
-    publish: function (eventName, data) {
+    publish: function (eventName, data, config) {
       this.target.trigger(eventName, data);
-      if (bc) {
+      var _config = config || {};
+      if (bc && _config.domain === true) {
         try {
           bc.postMessage(JSON.parse(JSON.stringify({
             eventName: eventName,
