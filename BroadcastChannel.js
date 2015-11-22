@@ -73,5 +73,7 @@
     }
   };
 
-  global.BroadcastChannel = global.BroadcastChannel || BroadcastChannel;
+  if(typeof window.MessageChannel === "function"){
+    global.BroadcastChannel = global.BroadcastChannel || BroadcastChannel;
+  }
 }(self));
