@@ -11,7 +11,7 @@ _define_('jqbus', function (jqbus) {
 
   var setDummyDomProp = function (target, __targetId__, __nameSpace__) {
     target.removeClass().addClass(toNameClass(__nameSpace__));
-    target.attr("id", dotToDash(__targetId__ || ""));
+    target.attr("id", "bus-" + dotToDash(__targetId__ || ""));
     return target;
   };
 
@@ -77,7 +77,10 @@ _define_('jqbus', function (jqbus) {
         };
         this.ids.push({eventName: eventName[0], filter: eventName[1], fun: callback});
         if (eventName[1]) {
-          var hash = "." + toNameClass(eventName[1]);
+          var hash = ("." + eventName[1].split("#").map(function(_h){
+            return  _h ? toNameClass(_h) : _h;
+          }).join("#")).replace(".#","#");
+          
           globalBus.on(eventName[0], hash, callback);
         } else globalBus.on(eventName[0], callback);
       }
@@ -117,6 +120,15 @@ _define_('jqbus', function (jqbus) {
         return this;
       } else {
         return this.instance().bind(self, mapping);
+      }
+    },
+    map: function(busEvents) {
+      var self = this, id = "___jq__bind__" + getUUID();
+      return function() {
+        if (!this.hasOwnProperty(id)) {
+          this[id] = self.instance().bind(this, busEvents);
+        }
+        return this[id];
       }
     }
   };
