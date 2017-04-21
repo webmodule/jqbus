@@ -1,7 +1,6 @@
 {
   "name": "webmodules-jqbus",
   "main": "jqbus.js",
-  "version": "0.0.0",
   "authors": [
     "Lalit Tanwar <lalit.tanwar07@gmail.com>"
   ],
@@ -13,7 +12,7 @@
   ],
   "dependencies": {
     "webmodules-jquery": ">=1.8",
-    "webmodules-foo" : ">=3.0.0"
+    "webmodules-foo" : ">=3.2.6"
   },
   "license": "MIT",
   "ignore": [
